@@ -2436,7 +2436,14 @@ int open_connections()
         memcpy(&local_addr_storage, &local_sockaddr, sizeof(local_sockaddr));
 
         if (local_sockaddr.ss_family == AF_INET) {
-            strcpy(local_ip_w_brackets, local_ip);
+            //If the auto_answer_local_ip option is used, use this for local_ip_w_brackets
+            if (automatic_answer_ip[0] != '\0') {
+                strcpy(local_ip_w_brackets, automatic_answer_ip);
+            } else  
+            {
+                strcpy(local_ip_w_brackets, local_ip);
+            }
+            
             if (!bind_specific) {
                 _RCAST(struct sockaddr_in*, &local_sockaddr)->sin_addr.s_addr = INADDR_ANY;
             }

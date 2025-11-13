@@ -229,6 +229,7 @@ MAYBE_EXTERN int                max_sched_loops         DEFVAL(MAX_SCHED_LOOPS_P
 MAYBE_EXTERN unsigned int       global_t2               DEFVAL(DEFAULT_T2_TIMER_VALUE);
 
 MAYBE_EXTERN char               local_ip[127];          /* also used for hostnames */
+MAYBE_EXTERN char               automatic_answer_ip[127];   /* ip address for automatic answers */
 MAYBE_EXTERN char               local_ip_w_brackets[42]; /* with [brackets] in case of IPv6 */
 MAYBE_EXTERN bool               local_ip_is_ipv6;
 MAYBE_EXTERN int                local_port              DEFVAL(0);
