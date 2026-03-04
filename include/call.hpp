@@ -225,6 +225,7 @@ protected:
     bool           call_established; // == true when the call is established
     // ie ACK received or sent
     // => init to false
+    bool           pre_exit_jump_applied;  // true once SIGUSR1-triggered pre-exit jump is applied
     bool           ack_is_pending;   // == true if an ACK is pending
     // Needed to avoid abortCall sending a
     // CANCEL instead of BYE in some extreme

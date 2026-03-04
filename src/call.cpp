@@ -889,6 +889,7 @@ void call::init(scenario * call_scenario, SIPpSocket *socket, struct sockaddr_st
 
     start_time = clock_tick;
     call_established=false ;
+    pre_exit_jump_applied=false ;
     ack_is_pending=false ;
     last_recv_msg = nullptr;
     cseq = base_cseq;
@@ -2099,6 +2100,18 @@ bool call::run()
             ERROR("Scenario overrun for call %s (%p) (index = %d)", id, _RCAST(void*, this), msg_index);
         }
         curmsg = call_scenario->messages[msg_index];
+    }
+
+    // Optional SIGUSR1 path: if -preexit_jump <label> resolves in scenario,
+    // jump active calls there once so scenarios can send final signaling.
+    if (!initCall && !pre_exit_jump_applied && sigusr1_pre_exit_jump_requested && call_scenario->pre_exit_jump_index >= 0) {
+        pre_exit_jump_applied = true;
+        msg_index = call_scenario->pre_exit_jump_index;
+        paused_until = 0;
+        recv_timeout = 0;
+        next_retrans = 0;
+        curmsg = call_scenario->messages[msg_index];
+        callDebug("SIGUSR1 pre-exit jump for call %s to index %d.\n", id, msg_index);
     }
 
     callDebug("Processing message %d of type %d for call %s at %lu.\n", msg_index, curmsg->M_type, id, clock_tick);

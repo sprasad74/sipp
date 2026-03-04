@@ -268,6 +268,7 @@ MAYBE_EXTERN unsigned int       pid                     DEFVAL(0);
 MAYBE_EXTERN bool               print_all_responses     DEFVAL(false);
 MAYBE_EXTERN unsigned long      stop_after              DEFVAL(0xffffffff);
 MAYBE_EXTERN int                quitting                DEFVAL(0);
+MAYBE_EXTERN volatile sig_atomic_t sigusr1_pre_exit_jump_requested DEFVAL(0);
 MAYBE_EXTERN int                interrupt               DEFVAL(0);
 MAYBE_EXTERN bool               paused                  DEFVAL(false);
 MAYBE_EXTERN int                lose_packets            DEFVAL(0);
@@ -284,6 +285,7 @@ MAYBE_EXTERN bool               extendedTwinSippMode    DEFVAL(false);
 MAYBE_EXTERN bool               nostdin                 DEFVAL(false);
 MAYBE_EXTERN bool               backgroundMode          DEFVAL(false);
 MAYBE_EXTERN bool               signalDump              DEFVAL(false);
+MAYBE_EXTERN const char       * pre_exit_jump_label     DEFVAL(nullptr);
 
 MAYBE_EXTERN int                currentScreenToDisplay  DEFVAL
 (DISPLAY_SCENARIO_SCREEN);

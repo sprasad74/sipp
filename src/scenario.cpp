@@ -1061,6 +1061,16 @@ scenario::scenario(char * filename, int deflt)
     } else {
         unexpected_jump = -1;
     }
+    if (pre_exit_jump_label && pre_exit_jump_label[0]) {
+        label_it = labelMap.find(pre_exit_jump_label);
+        if (label_it != labelMap.end()) {
+            pre_exit_jump_index = label_it->second;
+        } else {
+            pre_exit_jump_index = -1;
+        }
+    } else {
+        pre_exit_jump_index = -1;
+    }
     retaddr = find_var("_unexp.retaddr");
     pausedaddr = find_var("_unexp.pausedaddr");
 

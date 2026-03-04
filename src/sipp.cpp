@@ -215,6 +215,7 @@ struct sipp_option options_table[] = {
    {"plugin", "Load a plugin.", SIPP_OPTION_PLUGIN, nullptr, 1},
    {"sleep", "How long to sleep for at startup. Default unit is seconds.", SIPP_OPTION_TIME_SEC, &sleeptime, 1},
    {"skip_rlimit", "Do not perform rlimit tuning of file descriptor limits.  Default: false.", SIPP_OPTION_SETFLAG, &skip_rlimit, 1},
+   {"preexit_jump", "When SIGUSR1 is received, jump active calls to the specified scenario label before graceful shutdown. Example: -preexit_jump __pre_exit__", SIPP_OPTION_STRING, &pre_exit_jump_label, 1},
    {"buff_size", "Set the send and receive buffer size.", SIPP_OPTION_INT, &buff_size, 1},
    {"sendbuffer_warn", "Produce warnings instead of errors on SendBuffer failures.", SIPP_OPTION_BOOL, &sendbuffer_warn, 1},
    {"lost", "Set the number of packets to lose by default (scenario specifications override this value).", SIPP_OPTION_FLOAT, &global_lost, 1},
@@ -446,6 +447,9 @@ extern SIPpSocket  *sockets[SIPP_MAXFDS];
 static void sipp_sigusr1(int /* not used */)
 {
     /* Smooth exit: do not place any new calls and exit */
+    if (pre_exit_jump_label && pre_exit_jump_label[0]) {
+        sigusr1_pre_exit_jump_requested = 1;
+    }
     quitting += 10;
 }
 
@@ -902,6 +906,8 @@ static void help()
         "   USR1: Similar to pressing the 'q' key. It triggers a soft exit\n"
         "         of SIPp. No more new calls are placed and all ongoing calls\n"
         "         are finished before SIPp exits.\n"
+        "         With -preexit_jump <label>, active calls jump to that label\n"
+        "         once before graceful shutdown.\n"
         "         Example: kill -SIGUSR1 732\n"
         "   USR2: Triggers a dump of all statistics screens in\n"
         "         <scenario_name>_<pid>_screens.log file. Especially useful \n"

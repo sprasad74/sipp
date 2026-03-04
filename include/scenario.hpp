@@ -182,6 +182,7 @@ public:
     int duration;
     txnvec transactions;
     int unexpected_jump;
+    int pre_exit_jump_index;
     int retaddr;
     int pausedaddr;
 
