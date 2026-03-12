@@ -83,6 +83,11 @@ int paused_tasks_count()
     return paused_tasks.size();
 }
 
+int wake_paused_tasks()
+{
+    return paused_tasks.wake_paused_tasks();
+}
+
 // Methods for the task class
 
 task::task()
@@ -265,6 +270,44 @@ int timewheel::expire_paused_tasks()
         wheel_base++; // Move wheel_base to the next 1ms interval
     }
 
+    return found;
+}
+
+int timewheel::wake_paused_tasks()
+{
+    int found = 0;
+
+    for (int slot = 0; slot < LEVEL_ONE_SLOTS; ++slot) {
+        found += wheel_one[slot].size();
+        for (task_list::iterator it = wheel_one[slot].begin(); it != wheel_one[slot].end(); ++it) {
+            (*it)->add_to_runqueue();
+        }
+        wheel_one[slot].clear();
+    }
+
+    for (int slot = 0; slot < LEVEL_TWO_SLOTS; ++slot) {
+        found += wheel_two[slot].size();
+        for (task_list::iterator it = wheel_two[slot].begin(); it != wheel_two[slot].end(); ++it) {
+            (*it)->add_to_runqueue();
+        }
+        wheel_two[slot].clear();
+    }
+
+    for (int slot = 0; slot < LEVEL_THREE_SLOTS; ++slot) {
+        found += wheel_three[slot].size();
+        for (task_list::iterator it = wheel_three[slot].begin(); it != wheel_three[slot].end(); ++it) {
+            (*it)->add_to_runqueue();
+        }
+        wheel_three[slot].clear();
+    }
+
+    found += forever_list.size();
+    for (task_list::iterator it = forever_list.begin(); it != forever_list.end(); ++it) {
+        (*it)->add_to_runqueue();
+    }
+    forever_list.clear();
+
+    count = 0;
     return found;
 }
 

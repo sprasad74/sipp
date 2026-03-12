@@ -51,6 +51,7 @@ public:
     timewheel();
 
     int expire_paused_tasks();
+    int wake_paused_tasks();
     /* Add a paused task and increment count. */
     void add_paused_task(task *task, bool increment);
     void remove_paused_task(task *task);
@@ -124,6 +125,7 @@ private:
 task_list * get_running_tasks();
 int expire_paused_tasks();
 int paused_tasks_count();
+int wake_paused_tasks();
 void abort_all_tasks();
 void dump_tasks();
 

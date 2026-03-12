@@ -449,6 +449,7 @@ static void sipp_sigusr1(int /* not used */)
     /* Smooth exit: do not place any new calls and exit */
     if (pre_exit_jump_label && pre_exit_jump_label[0]) {
         sigusr1_pre_exit_jump_requested = 1;
+        sigusr1_wake_paused_tasks_requested = 1;
     }
     quitting += 10;
 }
@@ -549,6 +550,11 @@ static void traffic_thread(int &rtp_errors, int &echo_errors)
         }
 
         update_clock_tick();
+
+        if (sigusr1_wake_paused_tasks_requested) {
+            last_woken_calls += wake_paused_tasks();
+            sigusr1_wake_paused_tasks_requested = 0;
+        }
 
         /* Schedule all pending calls and process their timers */
         task_list *running_tasks;
