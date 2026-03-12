@@ -451,7 +451,9 @@ static void sipp_sigusr1(int /* not used */)
         sigusr1_pre_exit_jump_requested = 1;
         sigusr1_wake_paused_tasks_requested = 1;
     }
-    quitting += 10;
+    if (quitting < 10) {
+        quitting = 10;
+    }
 }
 
 static void sipp_sigusr2(int /* not used */)
