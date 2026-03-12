@@ -830,6 +830,7 @@ call *call::add_call(int userId, bool ipv6, struct sockaddr_storage *dest)
 
 void call::init(scenario * call_scenario, SIPpSocket *socket, struct sockaddr_storage *dest, const char * p_id, int userId, bool ipv6, bool isAutomatic, bool isInitCall)
 {
+    live_call_count++;
     _srtpctxdebugfile = nullptr;
 
     if (srtpcheck_debug)
@@ -1145,6 +1146,9 @@ int call::_callDebug(const char *fmt, ...)
 
 call::~call()
 {
+    if (live_call_count > 0) {
+        live_call_count--;
+    }
     computeStat(CStat::E_ADD_CALL_DURATION, clock_tick - start_time);
 
     if (call_remote_socket && (call_remote_socket != main_remote_socket)) {

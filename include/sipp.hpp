@@ -270,6 +270,7 @@ MAYBE_EXTERN unsigned long      stop_after              DEFVAL(0xffffffff);
 MAYBE_EXTERN int                quitting                DEFVAL(0);
 MAYBE_EXTERN volatile sig_atomic_t sigusr1_pre_exit_jump_requested DEFVAL(0);
 MAYBE_EXTERN volatile sig_atomic_t sigusr1_wake_paused_tasks_requested DEFVAL(0);
+MAYBE_EXTERN unsigned long live_call_count DEFVAL(0);
 MAYBE_EXTERN int                interrupt               DEFVAL(0);
 MAYBE_EXTERN bool               paused                  DEFVAL(false);
 MAYBE_EXTERN int                lose_packets            DEFVAL(0);

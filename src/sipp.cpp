@@ -523,7 +523,7 @@ static void traffic_thread(int &rtp_errors, int &echo_errors)
         }
         if (quitting) {
             /* Quitting and no more opened calls, close all */
-            if ((quitting >= 11) || !main_scenario->stats->GetStat(CStat::CPT_C_CurrentCall)) {
+            if ((quitting >= 11) || !live_call_count) {
                 /* We can have calls that do not count towards our open-call count (e.g., dead calls). */
                 abort_all_tasks();
                 rtp_errors = rtpstream_shutdown(main_scenario->fetchRtpTaskThreadIDs());
